@@ -6,14 +6,22 @@
 
 ### Prévia do aplicativo
 
-<a href="CAPA/historico.png"><img src="CAPA/historico.png" alt="Painel de histórico do MV Clipboard" width="32%" /></a>
-<a href="CAPA/gerenciamento.png"><img src="CAPA/gerenciamento.png" alt="Gerenciamento do histórico" width="32%" /></a>
-<a href="CAPA/config.png"><img src="CAPA/config.png" alt="Configurações do aplicativo" width="32%" /></a>
+<a href="CAPA/historico.png">
+<img src="CAPA/historico.png" alt="Painel de histórico do MV Clipboard" width="32%" /></a>
 
-### Demonstração em vídeo
+<br>
 
-<a href="CAPA/v14771g5000cdb80mr7og65lc4sva440.mp4"><img src="CAPA/historico.png" alt="Clique para assistir à demonstração do MV Clipboard" width="420" /></a>
+<a href="CAPA/gerenciamento.png">
+<img src="CAPA/gerenciamento.png" alt="Gerenciamento do histórico" width="32%" /></a>
 
+<br>
+
+<a href="CAPA/config.png">
+ <img src="CAPA/config.png" alt="Configurações do aplicativo" width="32%" /></a>
+
+<br>
+
+<video src="CAPA/v14771g5000cdb80mr7og65lc4sva440.mp4" controls width="100%"></video>
 **[▶ Assistir à demonstração em MP4](CAPA/v14771g5000cdb80mr7og65lc4sva440.mp4)**
 
 </div>
