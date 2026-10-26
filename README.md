@@ -7,7 +7,7 @@
 ### Prévia do aplicativo
 
 <a href="CAPA/historico.png">
-<img src="CAPA/historico.png" alt="Painel de histórico do MV Clipboard" width="32%" /></a>
+<img src="CAPA/historico.png" alt="Painel de histórico do MV Clipboard" width="100%" /></a>
 
 <br>
 
