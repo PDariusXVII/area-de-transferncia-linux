@@ -1,0 +1,16 @@
+#!/bin/sh
+# Launcher do MV Clipboard. Força X11/XWayland (--ozone-platform=x11): é o que dá posição, foco e
+# transparência previsíveis também em sessões Wayland. Variáveis úteis:
+#   MVCLIP_DISABLE_GPU=1      janela preta/transparência quebrada (driver de vídeo)
+#   MVCLIP_NO_SANDBOX=1       só se o chrome-sandbox não puder ser configurado (menos seguro)
+#   MVCLIP_NATIVE_WAYLAND=1   não forçar XWayland (sem posicionamento da janela)
+DIR="$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)"
+# Usa o binário do Electron direto (sem passar pelo script Node de node_modules/.bin): no autostart do desktop o
+# `node` instalado via nvm normalmente NÃO está no PATH, e o launcher precisa funcionar mesmo assim.
+ELECTRON="$DIR/node_modules/electron/dist/electron"
+[ -x "$ELECTRON" ] || ELECTRON="$DIR/node_modules/.bin/electron"
+[ -n "$MVCLIP_NO_SANDBOX" ] && set -- --no-sandbox "$@"
+if [ -n "$MVCLIP_NATIVE_WAYLAND" ]; then
+  exec "$ELECTRON" "$DIR" "$@"
+fi
+exec "$ELECTRON" "$DIR" --ozone-platform=x11 "$@"

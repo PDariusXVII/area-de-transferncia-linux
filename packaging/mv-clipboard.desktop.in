@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=MV Clipboard
+Comment=Histórico da área de transferência (Super+V)
+Exec=@EXEC@
+Icon=edit-paste
+Terminal=false
+NoDisplay=true
+X-GNOME-Autostart-enabled=true
+X-GNOME-Autostart-Delay=3

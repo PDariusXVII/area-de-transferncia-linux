@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Cores e efeitos do Windows 11 (Dark) — iguais ao protótipo, exceto onde indicado. */
+  --mica-bg: rgba(32, 32, 32, 0.88);   /* protótipo: 0.65. No Linux NÃO existe blur do desktop atrás da janela
+                                          (backdrop-filter só desfoca o que está dentro da própria página), então
+                                          o painel fica mais opaco para manter a legibilidade. Volte a 0.65 se preferir. */
+  --mica-border: rgba(255, 255, 255, 0.08);
+
+  --acrylic-bg: rgba(43, 43, 43, 0.85);
+  --acrylic-border: rgba(255, 255, 255, 0.1);
+
+  --item-hover: rgba(255, 255, 255, 0.06);
+  --item-bg: rgba(255, 255, 255, 0.03);
+
+  --accent: #60CDFF;               /* trocado em tempo de execução pela tela de Configurações */
+  --text-primary: #FFFFFF;
+  --text-secondary: #A0A0A0;
+}
+
+/* A janela do Electron é transparente: sem wallpaper de fundo (o do protótipo era só para demonstrar o vidro). */
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+  user-select: none;
+}
+body {
+  font-family: 'Segoe UI Variable', 'Segoe UI', 'Inter', system-ui, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;   /* painel centralizado na folga transparente reservada para a sombra */
+}
+
+/* Scrollbar estilo Windows 11 */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; margin-block: 4px; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.3); }
+
+/* Efeito Mica (painel principal). Sombra reduzida para caber na folga (24px) da janela. */
+.fluent-window {
+  background-color: var(--mica-bg);
+  backdrop-filter: blur(40px) saturate(150%);
+  -webkit-backdrop-filter: blur(40px) saturate(150%);
+  border: 1px solid var(--mica-border);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Efeito Acrylic (menu de contexto). Aqui o backdrop-filter funciona: desfoca os cards que estão atrás do menu. */
+.fluent-menu {
+  background-color: var(--acrylic-bg);
+  backdrop-filter: blur(60px) saturate(200%);
+  -webkit-backdrop-filter: blur(60px) saturate(200%);
+  border: 1px solid var(--acrylic-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
+              0 0 0 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Cards do histórico */
+.fluent-item {
+  background-color: var(--item-bg);
+  border: 1px solid transparent;
+  transition: all 0.15s ease-in-out;
+}
+.fluent-item:hover {
+  background-color: var(--item-hover);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.fluent-item.is-selected {              /* navegação por teclado (setas) */
+  background-color: var(--item-hover);
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+}
+.accent-text { color: var(--accent); }
+
+/* Botões de ação menores */
+.fluent-icon-btn { background-color: transparent; transition: all 0.1s; }
+.fluent-icon-btn:hover { background-color: rgba(255, 255, 255, 0.1); }
+
+/* Itens do dropdown */
+.menu-item { transition: background-color 0.1s; }
+.menu-item:hover { background-color: rgba(255, 255, 255, 0.07); }
+.menu-item[aria-disabled="true"] { opacity: 0.4; pointer-events: none; }
+
+/* Abre o dropdown para cima quando não há espaço embaixo (o card é cortado pela área rolável). */
+.menu.flip-up { top: auto; bottom: 110%; transform-origin: bottom right; }
+
+/* ---- Telas: histórico x configurações ---- */
+#settings-view { display: none; }
+body[data-view="settings"] #main-view { display: none; }
+body[data-view="settings"] #settings-view { display: flex; }
+
+/* ---- Configurações ---- */
+.set-title { font-size: 11.5px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-secondary); margin: 0 4px 6px; }
+.set-card { background-color: var(--item-bg); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 10px 12px; }
+.set-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 0; }
+.set-label { font-size: 13px; font-weight: 500; color: #ececec; }
+.set-help { font-size: 11.5px; line-height: 1.45; color: var(--text-secondary); }
+.set-kbd { font-family: inherit; font-size: 12px; font-weight: 600; color: #fff; background: rgba(255, 255, 255, 0.1);
+           border: 1px solid rgba(255, 255, 255, 0.15); border-bottom-width: 2px; border-radius: 6px; padding: 2px 8px; }
+.set-input { font: inherit; font-size: 12.5px; color: #f1f1f1; background-color: rgba(255, 255, 255, 0.07);
+             border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 6px; padding: 5px 8px; outline: none; }
+.set-input:focus-visible, .set-btn:focus-visible, .fluent-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.set-input option { background-color: #2b2b2b; color: #f1f1f1; }
+.set-btn { font: inherit; font-size: 12.5px; font-weight: 500; color: #f1f1f1; background-color: rgba(255, 255, 255, 0.08);
+           border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 6px; padding: 5px 12px; transition: background-color 0.1s; }
+.set-btn:hover { background-color: rgba(255, 255, 255, 0.14); }
+.set-btn.is-recording { background-color: var(--accent); border-color: var(--accent); color: #0b0b0b; }
+.set-btn-danger { color: #ff9b9b; }
+.set-btn-danger:hover { background-color: rgba(239, 68, 68, 0.2); }
+input[type="range"] { accent-color: var(--accent); }
+
+/* Interruptor estilo Windows 11 */
+.fluent-toggle { appearance: none; -webkit-appearance: none; flex: none; position: relative; width: 40px; height: 20px; border-radius: 10px;
+                 background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.4); transition: all 0.15s; }
+.fluent-toggle::after { content: ''; position: absolute; top: 3px; left: 3px; width: 12px; height: 12px; border-radius: 50%;
+                        background: #d6d6d6; transition: all 0.15s; }
+.fluent-toggle:checked { background: var(--accent); border-color: var(--accent); }
+.fluent-toggle:checked::after { left: 23px; background: #0b0b0b; }
+
+/* Amostras de cor */
+.swatch { width: 20px; height: 20px; border-radius: 50%; border: 2px solid transparent; padding: 0; transition: transform 0.1s; }
+.swatch:hover { transform: scale(1.12); }
+.swatch[aria-checked="true"] { border-color: #fff; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5); }

@@ -1,0 +1,7 @@
+{
+  "uuid": "mv-clipboard-bridge@mv.local",
+  "name": "MV Clipboard Bridge",
+  "description": "Ponte entre o GNOME Shell e o app MV Clipboard: avisa quando a área de transferência muda (Wayland e X11) e injeta Ctrl+V.",
+  "shell-version": ["43", "44"],
+  "version": 1
+}

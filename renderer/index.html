@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Sem CDN: Tailwind é compilado localmente (npm run build:css) e tudo roda offline. -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'none'; img-src 'self' file: data:; style-src 'self'; script-src 'self'">
+    <title>Área de transferência</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="antialiased text-gray-200">
+
+    <!-- Container principal (proporções do Windows) -->
+    <div class="fluent-window w-[380px] h-[580px] rounded-[14px] flex flex-col relative">
+
+      <!-- Tela principal: histórico -->
+      <div id="main-view" class="flex flex-col flex-1 min-h-0 relative">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between px-5 pt-5 pb-3">
+            <h2 class="text-[15px] font-semibold tracking-wide text-white">Área de transferência</h2>
+            <div class="flex items-center gap-1">
+                <button id="btn-clear" class="text-[13px] font-medium text-gray-400 hover:text-white bg-transparent px-2.5 py-1.5 rounded transition-colors hover:bg-white/5">
+                    Limpar tudo
+                </button>
+                <button id="btn-settings" class="fluent-icon-btn p-1.5 rounded-[4px] text-gray-400 hover:text-white" title="Configurações" aria-label="Configurações">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Lista rolável (os cards são gerados por renderer.js com as mesmas classes do protótipo) -->
+        <div id="list" class="flex-1 overflow-y-auto overflow-x-hidden px-4 pb-4 space-y-3 relative z-0"></div>
+
+        <!-- Estado vazio -->
+        <div id="empty" class="hidden flex-col items-center justify-center text-center absolute inset-x-0 top-[70px] bottom-0 px-10 pointer-events-none">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mb-3 opacity-70">
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+            </svg>
+            <p class="text-[13.5px] font-medium text-gray-300">Nada por aqui ainda</p>
+            <p class="text-[12.5px] text-gray-400 mt-1">Copie um texto ou uma imagem e ele aparece aqui.</p>
+        </div>
+      </div>
+
+      <!-- Tela de configurações (aberta pela engrenagem; as mudanças valem na hora) -->
+      <div id="settings-view" class="flex-col flex-1 min-h-0">
+        <div class="flex items-center gap-1.5 px-3 pt-4 pb-2">
+          <button id="settings-back" class="fluent-icon-btn p-1.5 rounded-[4px] text-gray-300 hover:text-white" title="Voltar" aria-label="Voltar">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+          </button>
+          <h2 class="text-[15px] font-semibold tracking-wide text-white">Configurações</h2>
+        </div>
+
+        <div id="settings-scroll" class="flex-1 overflow-y-auto overflow-x-hidden px-4 pb-4 space-y-4">
+
+          <p id="settings-error" class="hidden text-[12.5px] text-red-300 bg-red-500/10 border border-red-400/20 rounded-[6px] px-3 py-2"></p>
+          <p id="settings-note" class="hidden text-[12.5px] text-gray-300 bg-white/5 border border-white/10 rounded-[6px] px-3 py-2"></p>
+
+          <section>
+            <h3 class="set-title">Atalho</h3>
+            <div class="set-card space-y-2.5">
+              <div class="flex items-center justify-between gap-3">
+                <span class="set-label">Abrir o histórico</span>
+                <kbd id="hotkey-current" class="set-kbd">—</kbd>
+              </div>
+              <div class="flex items-center gap-2">
+                <select id="hotkey-preset" class="set-input flex-1" aria-label="Atalho pré-definido">
+                  <option value="Super+V">Super + V</option>
+                  <option value="Ctrl+Alt+V">Ctrl + Alt + V</option>
+                  <option value="Ctrl+Shift+V">Ctrl + Shift + V</option>
+                  <option value="Super+Shift+V">Super + Shift + V</option>
+                  <option value="Alt+Shift+V">Alt + Shift + V</option>
+                  <option value="" disabled hidden>Personalizado</option>
+                </select>
+                <button id="hotkey-record" class="set-btn" type="button">Gravar…</button>
+              </div>
+              <p id="hotkey-help" class="set-help">Combinações já usadas pelo sistema não chegam ao app: escolha uma da lista se a gravação não captar a sua.</p>
+            </div>
+          </section>
+
+          <section>
+            <h3 class="set-title">Inicialização</h3>
+            <div class="set-card divide-y divide-white/5">
+              <label class="set-row"><span class="set-label">Iniciar com o sistema</span><input id="opt-autostart" type="checkbox" class="fluent-toggle"></label>
+              <label class="set-row"><span class="set-label">Mostrar a janela ao iniciar</span><input id="opt-showOnStart" type="checkbox" class="fluent-toggle"></label>
+            </div>
+          </section>
+
+          <section>
+            <h3 class="set-title">Comportamento</h3>
+            <div class="set-card divide-y divide-white/5">
+              <label class="set-row"><span class="set-label">Fechar ao clicar fora</span><input id="opt-closeOnBlur" type="checkbox" class="fluent-toggle"></label>
+              <label class="set-row"><span class="set-label">Posição da janela</span>
+                <select id="opt-position" class="set-input w-[170px]">
+                  <option value="bottom-right">Canto inferior direito</option>
+                  <option value="cursor">Perto do cursor (só X11)</option>
+                </select>
+              </label>
+              <label class="set-row"><span class="set-label">Itens no histórico</span>
+                <select id="opt-maxItems" class="set-input w-[90px]">
+                  <option value="25">25</option><option value="50">50</option><option value="100">100</option><option value="200">200</option><option value="500">500</option>
+                </select>
+              </label>
+            </div>
+          </section>
+
+          <section>
+            <h3 class="set-title">Aparência</h3>
+            <div class="set-card space-y-3">
+              <label class="flex items-center justify-between gap-3">
+                <span class="set-label">Opacidade do painel</span>
+                <span class="flex items-center gap-2"><input id="opt-opacity" type="range" min="40" max="100" step="2" class="w-[130px]"><output id="opt-opacity-value" class="set-help w-[38px] text-right">88%</output></span>
+              </label>
+              <div class="flex items-center justify-between gap-3">
+                <span class="set-label">Cor de destaque</span>
+                <div id="accent-swatches" class="flex items-center gap-1.5" role="radiogroup" aria-label="Cor de destaque"></div>
+              </div>
+              <p class="set-help">O desktop Linux não permite desfocar o que está atrás da janela; por isso o painel é mais opaco que no Windows.</p>
+            </div>
+          </section>
+
+          <section>
+            <h3 class="set-title">Dados</h3>
+            <div class="set-card flex flex-wrap gap-2">
+              <button id="btn-clear-all" class="set-btn" type="button">Apagar todo o histórico</button>
+              <button id="btn-quit" class="set-btn set-btn-danger" type="button">Encerrar o MV Clipboard</button>
+              <p class="set-help w-full">“Apagar todo o histórico” remove também os itens fixados. Sem ícone na bandeja, “Encerrar” é a forma de fechar o app (ele volta no próximo login).</p>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <script src="renderer.js"></script>
+    <script src="settings.js"></script>
+</body>
+</html>

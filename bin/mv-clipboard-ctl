@@ -1,0 +1,13 @@
+#!/bin/sh
+# Envia um comando ao MV Clipboard que já está rodando (uso típico: atalho Super+V do desktop).
+# Leve de propósito (~3 ms, sem Node/Electron): só grava um arquivo na caixa de entrada do app.
+#   mv-clipboard-ctl toggle | show | hide | quit
+cmd="${1:-toggle}"
+case "$cmd" in
+  toggle|show|hide|quit) ;;
+  *) echo "uso: $0 toggle|show|hide|quit" >&2; exit 2 ;;
+esac
+dir="${XDG_RUNTIME_DIR:-/tmp}/mv-clipboard/inbox"
+mkdir -p "$dir" || exit 1
+f="$dir/$(date +%s%3N)-$$"
+printf '{"type":"%s"}\n' "$cmd" > "$f.tmp" && mv "$f.tmp" "$f.json"
