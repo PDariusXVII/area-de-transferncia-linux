@@ -13,24 +13,11 @@
 
 <a href="CAPA/gerenciamento.png">
 <img src="CAPA/gerenciamento.png" alt="Gerenciamento do histórico" width="32%" /></a>
-
-<br>
-
 <a href="CAPA/config.png">
  <img src="CAPA/config.png" alt="Configurações do aplicativo" width="32%" /></a>
 
-<br>
-
-<video src="CAPA/v14771g5000cdb80mr7og65lc4sva440.mp4" controls width="100%"></video>
-**[▶ Assistir à demonstração em MP4](CAPA/v14771g5000cdb80mr7og65lc4sva440.mp4)**
-
 </div>
 
-> **Para reproduzir o vídeo dentro do README no GitHub:** envie o MP4 como anexo no editor de uma Issue ou Pull Request do repositório. Copie o endereço gerado no formato `https://github.com/user-attachments/assets/...` e cole-o **sozinho em uma linha**, no lugar do comentário abaixo. O GitHub exibirá seu player quando reconhecer o anexo. O link acima continua como alternativa para abrir o arquivo diretamente.
-
-<!-- VIDEO_GITHUB: cole aqui, em uma linha isolada e sem Markdown, a URL real gerada pelo GitHub após enviar o arquivo CAPA/v14771g5000cdb80mr7og65lc4sva440.mp4 como anexo. -->
-
----
 
 Histórico da área de transferência para Linux, no estilo do **Super + V do Windows 11**: monitora texto e imagens em segundo plano, guarda o histórico localmente e abre uma janela flutuante (frameless, transparente, sempre no topo) com o seu HTML Fluent. Clicar num item devolve o conteúdo ao clipboard, fecha a janela e cola com Ctrl+V na janela que estava ativa.
 
